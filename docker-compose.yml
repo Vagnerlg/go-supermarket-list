@@ -1,0 +1,13 @@
+version: '3.4'
+services: 
+  golang:
+    image: golang
+    volumes:
+      - ./:/go/src/app
+    working_dir: /go/src/app
+  mongo:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: 123456
