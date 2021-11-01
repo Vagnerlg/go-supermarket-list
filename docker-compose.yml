@@ -5,9 +5,13 @@ services:
     volumes:
       - ./:/go/src/app
     working_dir: /go/src/app
+    ports:
+      - 3000:3000
   mongo:
     image: mongo
     restart: always
     environment:
       MONGO_INITDB_ROOT_USERNAME: root
       MONGO_INITDB_ROOT_PASSWORD: 123456
+    ports:
+      - 27017:27017

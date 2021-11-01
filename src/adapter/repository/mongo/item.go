@@ -1,6 +1,7 @@
 package mongo
 
 import (
+	"errors"
 	"log"
 	"time"
 
@@ -75,4 +76,27 @@ func All() []domain.Item {
 	}
 
 	return response
+}
+
+func Fisrt(id string) (domain.Item, error) {
+	oid, err := primitive.ObjectIDFromHex(id)
+	if err != nil {
+		return domain.Item{}, errors.New("item not found")
+	}
+
+	i := item{}
+	err = collection().FindOne(ctx, bson.D{{"_id", oid}}).Decode(&i)
+	if err != nil {
+		return domain.Item{}, errors.New("item not found")
+	}
+
+	return domain.Item{
+		Id:          i.Id.Hex(),
+		Product:     i.Product,
+		Description: i.Description,
+		Amount:      i.Amount,
+		CheckedAt:   i.CheckedAt,
+		CreatedAt:   i.CreatedAt,
+		UpdatedAt:   i.UpdatedAt,
+	}, nil
 }
