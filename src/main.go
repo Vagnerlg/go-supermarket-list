@@ -16,8 +16,6 @@ func main() {
 	itemRoute.GET("/", httpgin.All)
 	itemRoute.GET("/:id", httpgin.FindById)
 	itemRoute.POST("/", httpgin.Insert)
-	//itemRoute.PUT("/:id")
-	//itemRoute.DELETE("/:id")
 
 	err := r.Run(":3000")
 	if err != nil {

@@ -12,7 +12,7 @@ var ctx = context.TODO()
 
 func collection() *mongo.Collection {
 
-	clientOptions := options.Client().ApplyURI("mongodb://localhost:27017/").SetAuth(
+	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017/").SetAuth(
 		options.Credential{
 			Username: "root",
 			Password: "123456",

@@ -6,10 +6,6 @@ services:
       - ./:/go/src/app
       - ./.infra/golang/pkg:/go/pkg/mod/cache
     working_dir: /go/src/app
-    ports:
-      - 3000:3000
-    depends_on:
-      - mongo
   mongo:
     image: mongo
     restart: always
@@ -20,3 +16,13 @@ services:
       - ./.infra/mongodb/data:/data/db
     ports:
       - 27017:27017
+  app:
+    build:
+      context: ./.docker/app/
+      dockerfile: Dockerfile
+    volumes:
+      - ./main:/supermarket
+    ports:
+      - 3000:3000
+    depends_on:
+      - mongo
