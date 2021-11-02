@@ -1,20 +1,21 @@
 # Go supermarket list
-Api em golang com mongodb de uma lista de supermercado
+O projeto é uma Api de lista de supermercado feita em golang com mongodb.
 
 ## Required
 
 Ter o docker/docker-compose instalado
-Opsionamente ter o golang instalado + vscode
+
+> Opcional: ter o golang instalado + vscode
 
 ## Configuração e instalação
 
-Após clonar este repositorio entre no diretorio do projeto
+Após clonar este repositorio entre no diretorio do projeto.
 
 ```sh
 cd go-supermarket-list
 ```
 
-É necessário buildar o projeto go/supermarket-list
+É necessário buildar o projeto go-supermarket-list.
 
 ```sh
 docker-compose run --rm golang go build src/main.go
@@ -24,7 +25,7 @@ Se tudo deu certo vc terar um arquivo com o nome de main na pasta raiz do projet
 
 ![Alt text](./.docker/bash1.png?raw=true "Title")
 
-Agora é só inicialiar o serviço com docker-compose
+Agora é só inicializar o serviço com docker-compose
 
 ```sh
 docker-compose up -d

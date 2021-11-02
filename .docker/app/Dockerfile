@@ -2,7 +2,7 @@ FROM ubuntu
 
 WORKDIR /
 
-COPY --chown=root:root ./.docker/app/supermarket /supermarket
+COPY --chown=root:root ./supermarket /supermarket
 
 EXPOSE 3000
 
