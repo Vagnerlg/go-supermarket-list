@@ -8,14 +8,16 @@ import (
 	"github.com/vagnerlg/supermaketlist/src/domain"
 )
 
+var repository = mongo.MongoRepository{}
+
 func All(c *gin.Context) {
-	itens := mongo.All()
+	itens := repository.All()
 	if itens == nil {
 		c.JSON(http.StatusOK, []string{})
 		return
 	}
 
-	c.JSON(http.StatusOK, mongo.All())
+	c.JSON(http.StatusOK, repository.All())
 }
 
 func Insert(c *gin.Context) {
@@ -36,14 +38,14 @@ func Insert(c *gin.Context) {
 		return
 	}
 
-	item = mongo.Insert(item)
+	item = repository.Insert(item)
 
 	c.JSON(http.StatusOK, item)
 }
 
 func FindById(c *gin.Context) {
 	id := c.Param("id")
-	item, err := mongo.Fisrt(id)
+	item, err := repository.Fisrt(id)
 	if err != nil {
 		c.JSON(http.StatusNotFound, gin.H{
 			"error": err.Error(),

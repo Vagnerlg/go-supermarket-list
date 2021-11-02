@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/vagnerlg/supermaketlist/src/domain"
+	"github.com/vagnerlg/supermaketlist/src/port/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,7 +21,11 @@ type item struct {
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
 
-func Insert(i domain.Item) domain.Item {
+type MongoRepository struct {
+	repository.ItemRepository
+}
+
+func (m MongoRepository) Insert(i domain.Item) domain.Item {
 
 	itemMongo := item{
 		Id:          primitive.NewObjectID(),
@@ -45,7 +50,7 @@ func Insert(i domain.Item) domain.Item {
 	return i
 }
 
-func All() []domain.Item {
+func (m MongoRepository) All() []domain.Item {
 	filter := bson.D{{}}
 	result, err := collection().Find(ctx, filter)
 	if err != nil {
@@ -78,7 +83,7 @@ func All() []domain.Item {
 	return response
 }
 
-func Fisrt(id string) (domain.Item, error) {
+func (m MongoRepository) Fisrt(id string) (domain.Item, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return domain.Item{}, errors.New("item not found")
