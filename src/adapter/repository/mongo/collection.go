@@ -2,7 +2,9 @@ package mongo
 
 import (
 	"context"
+	"fmt"
 	"log"
+	"os"
 
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -11,11 +13,14 @@ import (
 var ctx = context.TODO()
 
 func collection() *mongo.Collection {
+	hostConn := fmt.Sprintf("mongodb://%v/", os.Getenv("DB_HOST"))
 
-	clientOptions := options.Client().ApplyURI("mongodb://mongo:27017/").SetAuth(
+	fmt.Println("env colection", hostConn)
+
+	clientOptions := options.Client().ApplyURI(hostConn).SetAuth(
 		options.Credential{
-			Username: "root",
-			Password: "123456",
+			Username: os.Getenv("DB_USER"),
+			Password: os.Getenv("DB_PASSWORD"),
 		},
 	)
 	client, err := mongo.Connect(ctx, clientOptions)

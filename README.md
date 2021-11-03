@@ -15,6 +15,12 @@ Após clonar este repositorio entre no diretorio do projeto.
 cd go-supermarket-list
 ```
 
+Copiar o env dev 
+
+```sh
+cp .env.dev .env
+```
+
 É necessário buildar o projeto go-supermarket-list.
 
 ```sh

@@ -4,10 +4,13 @@ import (
 	"fmt"
 
 	"github.com/gin-gonic/gin"
+	"github.com/joho/godotenv"
 	httpgin "github.com/vagnerlg/supermaketlist/src/adapter/http/gin"
 )
 
 func main() {
+
+	godotenv.Load()
 
 	r := gin.Default()
 

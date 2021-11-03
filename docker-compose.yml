@@ -14,14 +14,13 @@ services:
       MONGO_INITDB_ROOT_PASSWORD: 123456
     volumes:
       - ./.infra/mongodb/data:/data/db
-    ports:
-      - 27017:27017
   app:
     build:
       context: ./.docker/app/
       dockerfile: Dockerfile
     volumes:
       - ./main:/supermarket
+      - ./.env:/.env
     ports:
       - 3000:3000
     depends_on:
