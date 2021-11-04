@@ -12,7 +12,7 @@ import (
 
 var ctx = context.TODO()
 
-func collection() *mongo.Collection {
+func collection(model string) *mongo.Collection {
 	hostConn := fmt.Sprintf("mongodb://%v/", os.Getenv("DB_HOST"))
 
 	fmt.Println("env colection", hostConn)
@@ -35,5 +35,5 @@ func collection() *mongo.Collection {
 		panic("Erro ao conectar com o banco de dados")
 	}
 
-	return client.Database("supermaketlist").Collection("list")
+	return client.Database("supermaketlist").Collection(model)
 }

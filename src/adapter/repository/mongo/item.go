@@ -36,7 +36,7 @@ func (m MongoRepository) Insert(i domain.Item) domain.Item {
 		UpdatedAt:   time.Now(),
 	}
 
-	result, err := collection().InsertOne(ctx, itemMongo)
+	result, err := collection("list").InsertOne(ctx, itemMongo)
 
 	if err != nil {
 		log.Fatal(err)
@@ -52,7 +52,7 @@ func (m MongoRepository) Insert(i domain.Item) domain.Item {
 
 func (m MongoRepository) All() []domain.Item {
 	filter := bson.D{{}}
-	result, err := collection().Find(ctx, filter)
+	result, err := collection("list").Find(ctx, filter)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -64,7 +64,7 @@ func (m MongoRepository) All() []domain.Item {
 		err := result.Decode(&i)
 		if err != nil {
 			log.Fatal(err)
-			//continue
+			continue
 		}
 
 		dItem := domain.Item{
@@ -90,7 +90,7 @@ func (m MongoRepository) Fisrt(id string) (domain.Item, error) {
 	}
 
 	i := item{}
-	err = collection().FindOne(ctx, bson.D{{"_id", oid}}).Decode(&i)
+	err = collection("list").FindOne(ctx, bson.D{{"_id", oid}}).Decode(&i)
 	if err != nil {
 		return domain.Item{}, errors.New("item not found")
 	}
