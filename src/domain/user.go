@@ -48,3 +48,11 @@ func (u User) ComparePassword(secret string) bool {
 
 	return false
 }
+
+func (u User) GenerateJWT() string {
+	claim := Chaim{
+		Id:   u.Id,
+		Name: u.Name,
+	}
+	return claim.GenerateJWT()
+}

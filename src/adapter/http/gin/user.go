@@ -61,6 +61,6 @@ func Login(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"token": "token do jwt",
+		"token": userInternal.GenerateJWT(),
 	})
 }
