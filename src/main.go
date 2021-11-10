@@ -12,9 +12,9 @@ func main() {
 
 	godotenv.Load()
 
-	r := gin.Default()
+	r := gin.New()
 
-	itemRoute := r.Group("/item")
+	itemRoute := r.Group("/item", httpgin.AuthorizationJwt())
 
 	itemRoute.GET("/", httpgin.All)
 	itemRoute.GET("/:id", httpgin.FindById)
