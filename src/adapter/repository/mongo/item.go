@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/vagnerlg/supermaketlist/src/domain"
-	"github.com/vagnerlg/supermaketlist/src/port/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -21,13 +20,11 @@ type item struct {
 	UpdatedAt   time.Time          `bson:"updated_at"`
 }
 
-type MongoRepository struct {
-	repository.ItemRepository
-}
+type MongoItem struct{}
 
-func (m MongoRepository) Insert(i domain.Item) domain.Item {
+func (m MongoItem) Insert(i domain.Item) domain.Item {
 
-	itemMongo := item{
+	MongoItem := item{
 		Id:          primitive.NewObjectID(),
 		Product:     i.Product,
 		Description: i.Description,
@@ -36,7 +33,7 @@ func (m MongoRepository) Insert(i domain.Item) domain.Item {
 		UpdatedAt:   time.Now(),
 	}
 
-	result, err := collection("list").InsertOne(ctx, itemMongo)
+	result, err := collection("list").InsertOne(ctx, MongoItem)
 
 	if err != nil {
 		log.Fatal(err)
@@ -50,7 +47,7 @@ func (m MongoRepository) Insert(i domain.Item) domain.Item {
 	return i
 }
 
-func (m MongoRepository) All() []domain.Item {
+func (m MongoItem) All() []domain.Item {
 	filter := bson.D{{}}
 	result, err := collection("list").Find(ctx, filter)
 	if err != nil {
@@ -83,7 +80,7 @@ func (m MongoRepository) All() []domain.Item {
 	return response
 }
 
-func (m MongoRepository) Fisrt(id string) (domain.Item, error) {
+func (m MongoItem) First(id string) (domain.Item, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return domain.Item{}, errors.New("item not found")

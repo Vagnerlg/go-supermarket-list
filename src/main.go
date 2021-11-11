@@ -1,32 +1,24 @@
 package main
 
 import (
-	"fmt"
-
-	"github.com/gin-gonic/gin"
 	"github.com/joho/godotenv"
-	httpgin "github.com/vagnerlg/supermaketlist/src/adapter/http/gin"
+	"github.com/vagnerlg/supermaketlist/src/config"
 )
 
 func main() {
 
 	godotenv.Load()
 
-	r := gin.New()
+	app := config.NewApp()
 
-	itemRoute := r.Group("/item", httpgin.AuthorizationJwt())
+	routesItem := app.Http.Item
+	routesItem.All("/")
+	routesItem.FindById("/:id")
+	routesItem.Insert("/")
 
-	itemRoute.GET("/", httpgin.All)
-	itemRoute.GET("/:id", httpgin.FindById)
-	itemRoute.POST("/", httpgin.Insert)
+	routeUser := app.Http.User
+	routeUser.Insert("/")
+	routeUser.Login("/login")
 
-	userRoute := r.Group("/user")
-
-	userRoute.POST("/", httpgin.UserInsert)
-	userRoute.POST("/login", httpgin.Login)
-
-	err := r.Run(":3000")
-	if err != nil {
-		fmt.Println(err)
-	}
+	app.Http.Drive.Run()
 }

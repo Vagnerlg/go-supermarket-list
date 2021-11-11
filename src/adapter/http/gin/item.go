@@ -4,54 +4,68 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/vagnerlg/supermaketlist/src/adapter/repository/mongo"
 	"github.com/vagnerlg/supermaketlist/src/domain"
+	"github.com/vagnerlg/supermaketlist/src/port/repository"
 )
 
-var repository = mongo.MongoRepository{}
+var repositoryItem repository.RepositoryItem
 
-func All(c *gin.Context) {
-	itens := repository.All()
-	if itens == nil {
-		c.JSON(http.StatusOK, []string{})
-		return
-	}
+type GinItem struct{}
 
-	c.JSON(http.StatusOK, repository.All())
+func NewGinItem(repository repository.RepositoryItem) GinItem {
+	repositoryItem = repository
+
+	return GinItem{}
 }
 
-func Insert(c *gin.Context) {
-	item := domain.Item{}
-	err := c.ShouldBindJSON(&item)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "request com erro",
-		})
-		return
-	}
+func (g GinItem) All(route string) {
+	itemRoute.GET(route, func(c *gin.Context) {
+		itens := repositoryItem.All()
+		if itens == nil {
+			c.JSON(http.StatusOK, []string{})
+			return
+		}
 
-	item, err = domain.New(item)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
-
-	item = repository.Insert(item)
-
-	c.JSON(http.StatusOK, item)
+		c.JSON(http.StatusOK, repositoryItem.All())
+	})
 }
 
-func FindById(c *gin.Context) {
-	id := c.Param("id")
-	item, err := repository.Fisrt(id)
-	if err != nil {
-		c.JSON(http.StatusNotFound, gin.H{
-			"error": err.Error(),
-		})
-		return
-	}
+func (g GinItem) Insert(route string) {
+	itemRoute.POST(route, func(c *gin.Context) {
+		item := domain.Item{}
+		err := c.ShouldBindJSON(&item)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "request com erro",
+			})
+			return
+		}
 
-	c.JSON(http.StatusOK, item)
+		item, err = domain.New(item)
+		if err != nil {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		item = repositoryItem.Insert(item)
+
+		c.JSON(http.StatusOK, item)
+	})
+}
+
+func (g GinItem) FindById(route string) {
+	itemRoute.GET(route, func(c *gin.Context) {
+		id := c.Param("id")
+		item, err := repositoryItem.First(id)
+		if err != nil {
+			c.JSON(http.StatusNotFound, gin.H{
+				"error": err.Error(),
+			})
+			return
+		}
+
+		c.JSON(http.StatusOK, item)
+	})
 }

@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/vagnerlg/supermaketlist/src/domain"
-	"github.com/vagnerlg/supermaketlist/src/port/repository"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
 )
@@ -20,13 +19,11 @@ type user struct {
 	UpdatedAt time.Time          `bson:"updated_at"`
 }
 
-type UserMongoRepository struct {
-	repository.UserRepository
-}
+type MongoUser struct{}
 
-func (r UserMongoRepository) Insert(u domain.User) domain.User {
+func (r MongoUser) Insert(u domain.User) domain.User {
 
-	userMongo := user{
+	MongoUser := user{
 		Id:        primitive.NewObjectID(),
 		Name:      u.Name,
 		Email:     u.Email,
@@ -35,7 +32,7 @@ func (r UserMongoRepository) Insert(u domain.User) domain.User {
 		UpdatedAt: time.Now(),
 	}
 
-	result, err := collection("user").InsertOne(ctx, userMongo)
+	result, err := collection("user").InsertOne(ctx, MongoUser)
 
 	if err != nil {
 		log.Fatal(err)
@@ -49,7 +46,7 @@ func (r UserMongoRepository) Insert(u domain.User) domain.User {
 	return u
 }
 
-func (r UserMongoRepository) Fisrt(id string) (domain.User, error) {
+func (r MongoUser) First(id string) (domain.User, error) {
 	oid, err := primitive.ObjectIDFromHex(id)
 	if err != nil {
 		return domain.User{}, errors.New("user not found")
@@ -69,7 +66,7 @@ func (r UserMongoRepository) Fisrt(id string) (domain.User, error) {
 	}, nil
 }
 
-func (r UserMongoRepository) FindByEmail(email string) (domain.User, error) {
+func (r MongoUser) FindByEmail(email string) (domain.User, error) {
 
 	u := user{}
 	err := collection("user").FindOne(ctx, bson.D{{"email", email}}).Decode(&u)
@@ -85,7 +82,7 @@ func (r UserMongoRepository) FindByEmail(email string) (domain.User, error) {
 	}, nil
 }
 
-func (r UserMongoRepository) Login(email string, password string) bool {
+func (r MongoUser) Login(email string, password string) bool {
 	user, err := r.FindByEmail(email)
 	if err != nil {
 		return false

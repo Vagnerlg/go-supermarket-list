@@ -8,7 +8,7 @@ import (
 	"github.com/vagnerlg/supermaketlist/src/domain"
 )
 
-func AuthorizationJwt() gin.HandlerFunc {
+func authorizationJwt() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		auth := c.Request.Header.Get("Authorization")
 		auth = strings.ReplaceAll(auth, "Bearer ", "")
